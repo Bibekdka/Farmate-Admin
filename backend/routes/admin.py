@@ -36,13 +36,48 @@ def admin_dashboard():
     return render_template('admin/dashboard.html', income=total_income, expense=total_expense, 
                           profit=net_profit, records=records, expense_breakdown=expense_breakdown)
 
-@admin_routes.route('/admin/api/financial_data')
+@admin_routes.route('/api/admin/stats')
+def admin_stats_api():
+    total_income = db.session.query(func.sum(FarmRecord.amount)).filter(FarmRecord.category == 'Income').scalar() or 0
+    total_expense = db.session.query(func.sum(FarmRecord.amount)).filter(FarmRecord.category == 'Expense').scalar() or 0
+    
+    # Recent activities
+    recent = FarmRecord.query.order_by(FarmRecord.date.desc()).limit(10).all()
+    activities = [{
+        'id': r.id,
+        'date': r.date.strftime('%Y-%m-%d') if r.date else '',
+        'activity_type': r.activity_type,
+        'category': r.category,
+        'amount': r.amount,
+        'description': r.description
+    } for r in recent]
+    
+    # Reminders
+    reminders_query = Reminder.query.filter_by(completed=False).order_by(Reminder.date.asc()).limit(5).all()
+    reminders = [{
+        'id': rem.id,
+        'title': rem.title,
+        'date': rem.date.strftime('%Y-%m-%d') if rem.date else '',
+        'priority': rem.priority
+    } for rem in reminders_query]
+
+    return jsonify({
+        'stats': {
+            'income': total_income,
+            'expense': total_expense,
+            'balance': total_income - total_expense
+        },
+        'activities': activities,
+        'reminders': reminders
+    })
+
+@admin_routes.route('/api/admin/financial_data')
 def admin_financial_data_api():
-    # Basic data structure for the charts
+    # Placeholder for chart data - in a real app this would aggregate by month
     return jsonify({
         'months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         'income': [0, 0, 0, 0, 0, 0],
         'expense': [0, 0, 0, 0, 0, 0],
-        'expense_labels': [],
-        'expense_values': []
+        'expense_labels': ['Seeds', 'Fertilizer', 'Labor', 'Tools'],
+        'expense_values': [25, 40, 20, 15]
     })
