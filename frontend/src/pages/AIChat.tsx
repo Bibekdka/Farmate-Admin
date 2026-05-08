@@ -1,19 +1,19 @@
-import { useState, useEffect, useContext, useRef } from 'react'
-import axios from 'axios'
-import { saveChat, getChatHistory } from '../services/chatService'
-import { trace } from 'firebase/performance'
-import { perf } from '../firebase'
+import { useContext } from 'react'
+// import axios from 'axios'
+// import { saveChat, getChatHistory } from '../services/chatService'
+// import { trace } from 'firebase/performance'
+// import { perf } from '../firebase'
 import { AuthContext } from '../context/AuthContext'
 
 export default function AIChat() {
   const { user } = useContext(AuthContext)
-  const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState<{ role: string, content: string }[]>([])
-  const [loading, setLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  // const [message, setMessage] = useState('')
+  // const [messages, setMessages] = useState<{ role: string, content: string }[]>([])
+  // const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+  // const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
+  /*
   useEffect(() => {
     const fetchHistory = async () => {
       if (user?.uid) {
@@ -31,6 +31,7 @@ export default function AIChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
+  */
 
   /* 
   const askAI = async () => {

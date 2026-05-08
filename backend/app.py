@@ -35,7 +35,12 @@ def create_app():
         SECRET_KEY = "dev-secret-key" # Fallback for local
         print("WARNING: SECRET_KEY missing, using dev default")
 
-    if not DATABASE_URL:
+    if DATABASE_URL:
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+        elif DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith("postgresql+psycopg://"):
+            DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+    else:
         # Fallback to local SQLite if no remote DB is set
         db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'instance', 'farm_data.db')
         DATABASE_URL = f"sqlite:///{db_path}"
