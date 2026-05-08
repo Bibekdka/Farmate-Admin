@@ -145,7 +145,11 @@ def create_app():
                 return send_from_directory(dist_path, 'index.html')
             
             # Fallback to old home if React is not built
-            return admin_home()
+            from flask import redirect, url_for
+            try:
+                return redirect(url_for('admin_routes.admin_home'))
+            except:
+                return "Admin Dashboard (Flask) fallback - React build not found", 404
 
     return app
 

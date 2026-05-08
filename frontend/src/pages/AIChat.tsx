@@ -1,12 +1,5 @@
-import { useContext } from 'react'
-// import axios from 'axios'
-// import { saveChat, getChatHistory } from '../services/chatService'
-// import { trace } from 'firebase/performance'
-// import { perf } from '../firebase'
-import { AuthContext } from '../context/AuthContext'
-
 export default function AIChat() {
-  const { user } = useContext(AuthContext)
+  // Context and states removed to fix "unused variable" build errors
   // const [message, setMessage] = useState('')
   // const [messages, setMessages] = useState<{ role: string, content: string }[]>([])
   // const messagesEndRef = useRef<HTMLDivElement>(null)
