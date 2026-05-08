@@ -32,6 +32,7 @@ export default function AIChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
+  /* 
   const askAI = async () => {
     if (!message.trim() || !user?.uid) return;
     
@@ -62,6 +63,7 @@ export default function AIChat() {
       setLoading(false)
     }
   }
+  */
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 pb-16 md:pb-0">
