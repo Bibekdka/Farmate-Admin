@@ -16,10 +16,11 @@ export default function Weather() {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        // This endpoint should return WeatherLog data
         const res = await axios.get(`${API_URL}/api/admin/stats`)
-        // For now, let's assume the stats endpoint might include weather or we add a new one
-        // If empty, we show a friendly message
+        // The stats endpoint currently returns a placeholder for financial data, 
+        // but we can adapt it or just keep the state for future updates.
+        // For now, we'll set an empty list to stop the unused error.
+        setHistory(res.data.weather || [])
       } catch (err) {
         console.error("Error fetching weather:", err)
       } finally {
@@ -58,20 +59,28 @@ export default function Weather() {
         </div>
 
         <section>
-          <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 ml-2">Past 7 Days</h3>
+          <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 ml-2">Weather Log</h3>
           <div className="space-y-3">
-             {[...Array(5)].map((_, i) => (
-                <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 flex justify-between items-center">
-                   <div>
-                     <p className="text-xs text-gray-400 font-bold">May {10-i}, 2026</p>
-                     <p className="font-bold text-gray-800">Sunny</p>
-                   </div>
-                   <div className="text-right">
-                     <p className="text-xl font-black text-gray-900">30°C</p>
-                     <p className="text-[10px] text-blue-500 font-bold">0 mm rain</p>
-                   </div>
+             {loading ? (
+                <div className="text-center py-10 text-gray-400">Loading history...</div>
+             ) : history.length > 0 ? (
+                history.map((day, i) => (
+                  <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 flex justify-between items-center">
+                    <div>
+                      <p className="text-xs text-gray-400 font-bold">{day.date}</p>
+                      <p className="font-bold text-gray-800">{day.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xl font-black text-gray-900">{day.max_temp}°C</p>
+                      <p className="text-[10px] text-blue-500 font-bold">{day.rainfall} mm rain</p>
+                    </div>
+                  </div>
+                ))
+             ) : (
+                <div className="text-center py-10 bg-white rounded-3xl border border-dashed border-gray-200">
+                   <p className="text-gray-400">No weather history recorded yet.</p>
                 </div>
-             ))}
+             )}
           </div>
         </section>
       </main>

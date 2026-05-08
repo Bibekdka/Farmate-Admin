@@ -61,6 +61,16 @@ def admin_stats_api():
         'priority': rem.priority
     } for rem in reminders_query]
 
+    # Weather Logs
+    weather_query = WeatherLog.query.order_by(WeatherLog.date.desc()).limit(10).all()
+    weather = [{
+        'id': w.id,
+        'date': w.date.strftime('%Y-%m-%d') if w.date else '',
+        'max_temp': w.max_temp,
+        'rainfall': w.rainfall,
+        'description': w.description
+    } for w in weather_query]
+
     return jsonify({
         'stats': {
             'income': total_income,
@@ -68,7 +78,8 @@ def admin_stats_api():
             'balance': total_income - total_expense
         },
         'activities': activities,
-        'reminders': reminders
+        'reminders': reminders,
+        'weather': weather
     })
 
 @admin_routes.route('/api/admin/financial_data')
