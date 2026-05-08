@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, MessageSquare, CloudRain, Wallet, Notebook } from 'lucide-react'
+import { Home, MessageSquare, CloudRain, Wallet, Notebook, Sprout } from 'lucide-react'
 
 export default function BottomNav() {
   const location = useLocation()
@@ -43,11 +43,11 @@ export default function BottomNav() {
         </Link>
 
         <Link 
-          to="/weather" 
-          className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/weather') ? 'text-green-600' : 'text-gray-400'}`}
+          to="/crops" 
+          className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/crops') ? 'text-green-600' : 'text-gray-400'}`}
         >
-          <CloudRain size={20} strokeWidth={isActive('/weather') ? 3 : 2} />
-          <span className="text-[10px] font-bold">Weather</span>
+          <Sprout size={20} strokeWidth={isActive('/crops') ? 3 : 2} />
+          <span className="text-[10px] font-bold">Crops</span>
         </Link>
       </div>
     </div>

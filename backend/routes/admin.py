@@ -132,3 +132,137 @@ def manage_logs_api():
         'content': n.content,
         'date': n.created_at.strftime('%Y-%m-%d %H:%M')
     } for n in notes])
+@admin_routes.route('/api/admin/crops', methods=['GET', 'POST'])
+def manage_crops_api():
+    from flask import request
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_crop = Crop(
+                crop_name=data.get('crop_name'),
+                variety=data.get('variety'),
+                area=data.get('area'),
+                sowing_date=datetime.datetime.strptime(data['sowing_date'], '%Y-%m-%d').date() if data.get('sowing_date') else None,
+                expected_harvest=datetime.datetime.strptime(data['expected_harvest'], '%Y-%m-%d').date() if data.get('expected_harvest') else None,
+                notes=data.get('notes'),
+                status=data.get('status', 'Active')
+            )
+            db.session.add(new_crop)
+            db.session.commit()
+            return jsonify({'status': 'success'}), 201
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+    
+    crops = Crop.query.order_by(Crop.sowing_date.desc()).all()
+    return jsonify([{
+        'id': c.id,
+        'crop_name': c.crop_name,
+        'variety': c.variety,
+        'area': c.area,
+        'sowing_date': c.sowing_date.strftime('%Y-%m-%d') if c.sowing_date else '',
+        'expected_harvest': c.expected_harvest.strftime('%Y-%m-%d') if c.expected_harvest else '',
+        'status': c.status,
+        'notes': c.notes
+    } for c in crops])
+
+@admin_routes.route('/api/admin/yields', methods=['GET', 'POST'])
+def manage_yields_api():
+    from flask import request
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_yield = Yield(
+                date=datetime.datetime.strptime(data['date'], '%Y-%m-%d').date() if data.get('date') else datetime.date.today(),
+                crop_id=data.get('crop_id'),
+                yield_value=float(data.get('yield_value', 0)),
+                unit=data.get('unit'),
+                yield_in_kg=float(data.get('yield_in_kg', 0)),
+                notes=data.get('notes')
+            )
+            db.session.add(new_yield)
+            db.session.commit()
+            return jsonify({'status': 'success'}), 201
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+    
+    yields = Yield.query.order_by(Yield.date.desc()).all()
+    return jsonify([{
+        'id': y.id,
+        'date': y.date.strftime('%Y-%m-%d') if y.date else '',
+        'crop_name': y.crop.crop_name if y.crop else 'Unknown',
+        'yield_value': y.yield_value,
+        'unit': y.unit,
+        'yield_in_kg': y.yield_in_kg,
+        'notes': y.notes
+    } for y in yields])
+
+@admin_routes.route('/api/admin/disease_logs', methods=['GET', 'POST'])
+def manage_disease_logs_api():
+    from flask import request
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_log = DiseaseLog(
+                date=datetime.datetime.strptime(data['date'], '%Y-%m-%d').date() if data.get('date') else datetime.date.today(),
+                crop_id=data.get('crop_id'),
+                disease_name=data.get('disease_name'),
+                severity=data.get('severity'),
+                affected_area=data.get('affected_area'),
+                treatment=data.get('treatment'),
+                notes=data.get('notes')
+            )
+            db.session.add(new_log)
+            db.session.commit()
+            return jsonify({'status': 'success'}), 201
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+    
+    logs = DiseaseLog.query.order_by(DiseaseLog.date.desc()).all()
+    return jsonify([{
+        'id': l.id,
+        'date': l.date.strftime('%Y-%m-%d') if l.date else '',
+        'crop_name': l.crop.crop_name if l.crop else 'Unknown',
+        'disease_name': l.disease_name,
+        'severity': l.severity,
+        'affected_area': l.affected_area,
+        'treatment': l.treatment,
+        'notes': l.notes
+    } for l in logs])
+
+@admin_routes.route('/api/admin/reminders', methods=['GET', 'POST', 'PATCH'])
+def manage_reminders_api():
+    from flask import request
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_rem = Reminder(
+                date=datetime.datetime.strptime(data['date'], '%Y-%m-%d').date(),
+                title=data.get('title'),
+                description=data.get('description'),
+                priority=data.get('priority', 'Normal')
+            )
+            db.session.add(new_rem)
+            db.session.commit()
+            return jsonify({'status': 'success'}), 201
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+            
+    if request.method == 'PATCH':
+        # Mark as completed
+        data = request.json
+        rem = Reminder.query.get(data.get('id'))
+        if rem:
+            rem.completed = data.get('completed', True)
+            db.session.commit()
+            return jsonify({'status': 'success'})
+        return jsonify({'status': 'error', 'message': 'Not found'}), 404
+    
+    reminders = Reminder.query.order_by(Reminder.date.asc()).all()
+    return jsonify([{
+        'id': r.id,
+        'date': r.date.strftime('%Y-%m-%d') if r.date else '',
+        'title': r.title,
+        'description': r.description,
+        'priority': r.priority,
+        'completed': r.completed
+    } for r in reminders])

@@ -5,6 +5,9 @@ import Login from './pages/Login'
 import Financials from './pages/Financials'
 import DailyLog from './pages/DailyLog'
 import Weather from './pages/Weather'
+import Crops from './pages/Crops'
+import Reminders from './pages/Reminders'
+import DiseaseLog from './pages/DiseaseLog'
 import ProtectedRoute from './components/ProtectedRoute'
 import BottomNav from './components/BottomNav'
 import Sidebar from './components/Sidebar'
@@ -40,6 +43,21 @@ export default function App() {
             <Route path="/weather" element={
               <ProtectedRoute>
                 <Weather />
+              </ProtectedRoute>
+            } />
+            <Route path="/crops" element={
+              <ProtectedRoute>
+                <Crops />
+              </ProtectedRoute>
+            } />
+            <Route path="/reminders" element={
+              <ProtectedRoute>
+                <Reminders />
+              </ProtectedRoute>
+            } />
+            <Route path="/diseases" element={
+              <ProtectedRoute>
+                <DiseaseLog />
               </ProtectedRoute>
             } />
           </Routes>

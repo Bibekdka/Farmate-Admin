@@ -115,3 +115,94 @@ def analyze_logs_api():
         return jsonify({
             "error": str(e)
         }), 500
+
+@ai_routes.route("/api/ai/ask_crop_doctor", methods=["POST"])
+def ask_crop_doctor_api():
+    try:
+        data = request.json
+        crop_name = data.get('crop_name')
+        sowing_date = data.get('sowing_date')
+        
+        context = f"Planted on {sowing_date}" if sowing_date else "Planning to plant"
+        prompt = f"""
+        You are an expert Agronomist. The farmer is asking about '{crop_name}' ({context}).
+        Provide a concise Markdown response covering:
+        1. Common Pests & Diseases to watch out for NOW.
+        2. Watering & Care tips.
+        3. Estimated Harvest time from now.
+        
+        Keep it brief and practical. Use bullet points.
+        """
+        
+        model = get_ai_model()
+        if not model:
+            return jsonify({"error": "AI Service not configured"}), 503
+            
+        response = model.generate_content(prompt)
+        return jsonify({
+            "status": "success",
+            "content": response.text
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@ai_routes.route("/api/ai/recommend_crops", methods=["POST"])
+def recommend_crops_api():
+    try:
+        data = request.json
+        area = data.get('area', '1 Acre')
+        season = data.get('season', 'Current')
+        
+        prompt = f"""
+        Act as an Agriculture Business Consultant.
+        The user has {area} of land available in {season} (Location: India).
+        
+        Suggest 3 most profitable vegetable/crop options.
+        For each option, provide:
+        1. Estimated Profit Potential (High/Med/Low)
+        2. Duration (Days to harvest)
+        3. Why this crop? (Market demand, weather suitability)
+        
+        Format the response in clear Markdown.
+        """
+        
+        model = get_ai_model()
+        if not model:
+            return jsonify({"error": "AI Service not configured"}), 503
+            
+        response = model.generate_content(prompt)
+        return jsonify({
+            "status": "success",
+            "content": response.text
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@ai_routes.route("/api/ai/estimate_duration", methods=["POST"])
+def estimate_duration_api():
+    try:
+        data = request.json
+        crop_name = data.get('crop_name')
+        
+        prompt = f"""
+        How many days does '{crop_name}' typically take from sowing to harvest?
+        Return ONLY the number of days as an integer (e.g. 90). 
+        If it varies, give a safe average.
+        """
+        
+        model = get_ai_model()
+        if not model:
+            return jsonify({"error": "AI Service not configured"}), 503
+            
+        response = model.generate_content(prompt)
+        
+        import re
+        match = re.search(r'\d+', response.text)
+        if match:
+            return jsonify({
+                "status": "success",
+                "days": int(match.group())
+            })
+        return jsonify({"status": "error", "message": "Could not parse duration"}), 400
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
