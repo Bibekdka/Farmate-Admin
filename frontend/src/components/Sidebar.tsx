@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, MessageSquare, CloudRain, Wallet, Notebook, LogOut, Settings } from 'lucide-react'
+import { Home, MessageSquare, CloudRain, Wallet, Notebook, LogOut } from 'lucide-react'
 
 export default function Sidebar() {
   const location = useLocation()
