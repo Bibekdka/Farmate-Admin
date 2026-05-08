@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import AIChat from './pages/AIChat'
+import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import BottomNav from './components/BottomNav'
 
@@ -9,6 +10,7 @@ export default function App() {
     <>
       <div className="pb-16 md:pb-0">
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={
             <ProtectedRoute>
               <Dashboard />

@@ -1,11 +1,23 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 export default function Dashboard() {
+  const { logout } = useContext(AuthContext)
+
   return (
     <div className="min-h-screen p-4 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">
-        Farmate Dashboard
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">
+          Farmate Dashboard
+        </h1>
+        <button 
+          onClick={logout}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Link
