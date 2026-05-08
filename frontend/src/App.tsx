@@ -2,6 +2,9 @@ import { Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import AIChat from './pages/AIChat'
 import Login from './pages/Login'
+import Financials from './pages/Financials'
+import DailyLog from './pages/DailyLog'
+import Weather from './pages/Weather'
 import ProtectedRoute from './components/ProtectedRoute'
 import BottomNav from './components/BottomNav'
 
@@ -19,6 +22,21 @@ export default function App() {
           <Route path="/ai" element={
             <ProtectedRoute>
               <AIChat />
+            </ProtectedRoute>
+          } />
+          <Route path="/financials" element={
+            <ProtectedRoute>
+              <Financials />
+            </ProtectedRoute>
+          } />
+          <Route path="/logs" element={
+            <ProtectedRoute>
+              <DailyLog />
+            </ProtectedRoute>
+          } />
+          <Route path="/weather" element={
+            <ProtectedRoute>
+              <Weather />
             </ProtectedRoute>
           } />
         </Routes>

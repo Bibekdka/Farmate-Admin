@@ -81,3 +81,43 @@ def admin_financial_data_api():
         'expense_labels': ['Seeds', 'Fertilizer', 'Labor', 'Tools'],
         'expense_values': [25, 40, 20, 15]
     })
+
+@admin_routes.route('/api/admin/records', methods=['POST'])
+def add_record_api():
+    from flask import request
+    data = request.json
+    try:
+        new_record = FarmRecord(
+            date=datetime.datetime.strptime(data['date'], '%Y-%m-%d').date() if data.get('date') else datetime.date.today(),
+            activity_type=data.get('activity_type'),
+            category=data.get('category'),
+            expense_type=data.get('expense_type'),
+            amount=float(data.get('amount', 0)),
+            description=data.get('description')
+        )
+        db.session.add(new_record)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Record added successfully'}), 201
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+
+@admin_routes.route('/api/admin/logs', methods=['GET', 'POST'])
+def manage_logs_api():
+    from flask import request
+    from backend.models.models import Note
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_note = Note(content=data.get('content'))
+            db.session.add(new_note)
+            db.session.commit()
+            return jsonify({'status': 'success'}), 201
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+    
+    notes = Note.query.order_by(Note.created_at.desc()).all()
+    return jsonify([{
+        'id': n.id,
+        'content': n.content,
+        'date': n.created_at.strftime('%Y-%m-%d %H:%M')
+    } for n in notes])

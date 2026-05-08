@@ -63,6 +63,50 @@ def ai_chat():
             "response": response.text
         })
 
+@ai_routes.route("/api/ai/analyze_logs", methods=["POST"])
+@limiter.limit("5/minute")
+def analyze_logs_api():
+    try:
+        from backend.models.models import Note
+        import datetime
+        
+        # Get logs from last 7 days
+        week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+        logs = Note.query.filter(Note.created_at >= week_ago).order_by(Note.created_at.asc()).all()
+        
+        if not logs:
+            return jsonify({
+                "status": "warning",
+                "message": "No logs found for the last 7 days to analyze."
+            })
+
+        log_text = "\n".join([f"- {l.created_at.strftime('%Y-%m-%d')}: {l.content}" for l in logs])
+        
+        prompt = f"""
+        As an expert agricultural assistant, analyze these farm logs from the past week and provide:
+        1. A brief summary of progress.
+        2. Any potential issues or patterns (weather, pests, workload).
+        3. Actionable advice for the coming week.
+
+        Farm Logs:
+        {log_text}
+        
+        Format the response in clear Markdown.
+        """
+
+        model = get_ai_model()
+        if not model:
+            return jsonify({
+                "error": "AI Service not configured"
+            }), 503
+
+        response = model.generate_content(prompt)
+
+        return jsonify({
+            "status": "success",
+            "content": response.text
+        })
+
     except Exception as e:
         return jsonify({
             "error": str(e)
