@@ -184,3 +184,14 @@ Agriculture/
 - Conduct security audit biannually
 - Plan for database scaling at 100k records
 
+---
+
+## Neon PostgreSQL Migration (May 9, 2026)
+
+The application has been successfully migrated to **Neon (Serverless PostgreSQL)**.
+
+### 1. **Configuration**
+- **DATABASE_URL**: `postgresql://neondb_owner:npg_98zXwapIHRhc@ep-shy-glade-ap5xuln9-pooler.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require`
+
+### 2. **Migration Note**
+All historical farm data, blogs, and weather logs have been uploaded to the Neon database. The Render backend should now point to this URL in the environment variables.
