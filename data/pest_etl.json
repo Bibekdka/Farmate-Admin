@@ -1,0 +1,89 @@
+{
+  "Rice": {
+    "Stem Borer": {
+      "threshold": 5.0,
+      "unit": "percent_dead_hearts",
+      "condition": "greater_equal",
+      "advisory": "Apply Chlorantraniliprole 18.5 SC (20ml in 67L water per bigha) or release Trichogramma japonicum.",
+      "source_id": ""
+    },
+    "Rice Hispa": {
+      "threshold": 1.0,
+      "unit": "adult_or_damaged_leaf_per_hill",
+      "condition": "greater_equal",
+      "advisory": "Clip leaf tips before transplanting. Spray Chlorpyriphos 20EC @ 0.02%.",
+      "source_id": "Assam_POP_Rice"
+    },
+    "Leaf Folder": {
+      "threshold": 1.0,
+      "unit": "damaged_leaf_per_hill",
+      "condition": "greater",
+      "advisory": "Release Trichogramma chilonis. Spray Quinalphos 25EC.",
+      "source_id": ""
+    },
+    "Gandhi Bug": {
+      "threshold": 1.0,
+      "unit": "bugs_per_sq_m",
+      "condition": "greater_equal",
+      "advisory": "Apply Malathion 5% dust @ 20 kg/ha.",
+      "source_id": ""
+    }
+  },
+  "Tea": {
+    "Tea Mosquito Bug": {
+      "threshold": 5.0,
+      "unit": "percent_shoot_infestation",
+      "condition": "greater_equal",
+      "advisory": "Follow barrier spraying. Spray Thiamethoxam 25 WG. (Warning: high humidity increases risk)",
+      "source_id": ""
+    },
+    "Red Spider Mite": {
+      "threshold": 4.0,
+      "unit": "mites_per_leaf",
+      "condition": "greater_equal",
+      "advisory": "Apply acaricides. Inspect shade trees.",
+      "source_id": ""
+    },
+    "Leaf Roller": {
+      "threshold": 5.0,
+      "unit": "infested_rolls_per_bush",
+      "condition": "greater_equal",
+      "advisory": "Collection and destruction of egg masses. Spray Deltamethrin 2.8% EC.",
+      "source_id": ""
+    }
+  },
+  "Okra": {
+    "Shoot and Fruit Borer": {
+      "threshold": 1.0,
+      "unit": "infected_plant_per_meter_row",
+      "condition": "greater_equal",
+      "advisory": "Remove affected shoots. Spray Deltamethrin 2.8 EC.",
+      "source_id": ""
+    },
+    "Whitefly": {
+      "threshold": 4.0,
+      "unit": "adults_per_leaf",
+      "condition": "greater_equal",
+      "advisory": "Install yellow sticky traps. Spray Azadirachtin (Neem) 0.15% EC.",
+      "source_id": ""
+    }
+  },
+  "Tomato": {
+    "Fruit Borer": {
+      "threshold": 1.0,
+      "unit": "larva_per_plant",
+      "condition": "greater_equal",
+      "advisory": "Install pheromone traps @ 15/ha. Spray HaNPV 250 LE/ha.",
+      "source_id": ""
+    }
+  },
+  "Mustard": {
+    "Mustard Aphid": {
+      "threshold": 30.0,
+      "unit": "aphids_per_10cm_shoot",
+      "condition": "greater_equal",
+      "advisory": "Spray Dimethoate 30 EC.",
+      "source_id": ""
+    }
+  }
+}
