@@ -62,6 +62,10 @@ def ai_chat():
         return jsonify({
             "response": response.text
         })
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 @ai_routes.route("/api/ai/analyze_logs", methods=["POST"])
 @limiter.limit("5/minute")
