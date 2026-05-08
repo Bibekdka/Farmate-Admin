@@ -23,12 +23,26 @@ export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!auth || !auth.app) {
+      console.error("Auth is not initialized correctly.")
+      setLoading(false)
+      return
+    }
+
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u)
       setLoading(false)
     })
 
-    return () => unsub()
+    // Safety timeout: if auth doesn't respond in 10 seconds, clear loading
+    const timeout = setTimeout(() => {
+      setLoading(false)
+    }, 10000)
+
+    return () => {
+      unsub()
+      clearTimeout(timeout)
+    }
   }, [])
 
   const login = async () => {
