@@ -22,7 +22,10 @@ if not GEMINI_API_KEY:
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+def get_ai_model():
+    if not GEMINI_API_KEY:
+        return None
+    return genai.GenerativeModel("gemini-1.5-flash")
 
 
 @ai_routes.route("/api/ai", methods=["POST"])
@@ -47,6 +50,12 @@ def ai_chat():
             return jsonify({
                 "error": "Message too long"
             }), 400
+
+        model = get_ai_model()
+        if not model:
+            return jsonify({
+                "error": "AI Service is not configured. Please set GEMINI_API_KEY."
+            }), 503
 
         response = model.generate_content(prompt)
 
