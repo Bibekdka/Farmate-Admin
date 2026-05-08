@@ -76,10 +76,10 @@ def create_app():
         app,
         resources={
             r"/api/*": {
-                "origins": [FRONTEND_URL]
+                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app"]
             },
             r"/admin/*": {
-                "origins": [FRONTEND_URL]
+                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app"]
             }
         },
         supports_credentials=True
