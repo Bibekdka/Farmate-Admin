@@ -117,6 +117,31 @@ def create_app():
     app.register_blueprint(ai_routes)
     app.register_blueprint(admin_routes)
 
+    # =========================
+    # SERVE FRONTEND
+    # =========================
+
+    from flask import send_from_directory
+
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve(path):
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return send_from_directory(app.static_folder, path)
+        else:
+            # Check if it's an API route or admin template route
+            # If not, serve index.html from React dist
+            # For now, let's assume if it's not found in static, we try to serve the old templates
+            # But the React app is meant to be the main UI at /
+            dist_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend', 'dist')
+            if os.path.exists(os.path.join(dist_path, 'index.html')):
+                if path != "" and os.path.exists(os.path.join(dist_path, path)):
+                    return send_from_directory(dist_path, path)
+                return send_from_directory(dist_path, 'index.html')
+            
+            # Fallback to old home if React is not built
+            return admin_home()
+
     return app
 
 
