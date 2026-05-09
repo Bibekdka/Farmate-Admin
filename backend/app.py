@@ -149,25 +149,19 @@ def create_app():
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve(path):
+        dist_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend', 'dist')
+        
+        # 1. Try to serve from static_folder (assets)
         if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
             return send_from_directory(app.static_folder, path)
-        else:
-            # Check if it's an API route or admin template route
-            # If not, serve index.html from React dist
-            # For now, let's assume if it's not found in static, we try to serve the old templates
-            # But the React app is meant to be the main UI at /
-            dist_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend', 'dist')
-            if os.path.exists(os.path.join(dist_path, 'index.html')):
-                if path != "" and os.path.exists(os.path.join(dist_path, path)):
-                    return send_from_directory(dist_path, path)
-                return send_from_directory(dist_path, 'index.html')
             
-            # Fallback to old home if React is not built
-            from flask import redirect, url_for
-            try:
-                return redirect(url_for('admin_routes.admin_home'))
-            except:
-                return "Admin Dashboard (Flask) fallback - React build not found", 404
+        # 2. Try to serve from React build (dist)
+        if os.path.exists(os.path.join(dist_path, 'index.html')):
+            if path != "" and os.path.exists(os.path.join(dist_path, path)):
+                return send_from_directory(dist_path, path)
+            return send_from_directory(dist_path, 'index.html')
+            
+        return "Admin Dashboard - React build not found. Please run 'npm run build' in the frontend directory.", 404
 
     return app
 
