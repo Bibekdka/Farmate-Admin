@@ -33,7 +33,7 @@ export default function Financials() {
 
   const fetchRecords = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/admin/stats`)
+      const res = await axios.get(`${API_URL}/api/admin/stats?limit=0`)
       setRecords(res.data.activities)
     } catch (err) {
       console.error("Error fetching records:", err)

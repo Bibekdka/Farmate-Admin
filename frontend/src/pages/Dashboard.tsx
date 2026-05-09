@@ -37,7 +37,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/admin/stats`)
+        const res = await axios.get(`${API_URL}/api/admin/stats?limit=20`)
         setStats(res.data.stats)
         setActivities(res.data.activities)
         setReminders(res.data.reminders)
