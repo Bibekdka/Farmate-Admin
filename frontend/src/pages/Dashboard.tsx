@@ -116,9 +116,9 @@ export default function Dashboard() {
             <div className="p-3 bg-orange-100 text-orange-600 rounded-xl"><CloudRain size={20} /></div>
             <span className="text-xs font-bold text-gray-600">Weather</span>
           </Link>
-          <Link to="/crops" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
-            <div className="p-3 bg-green-100 text-green-600 rounded-xl"><Activity size={20} /></div>
-            <span className="text-xs font-bold text-gray-600">Crops</span>
+          <Link to="/legacy-dashboard" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
+            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Home size={20} /></div>
+            <span className="text-xs font-bold text-gray-600">Legacy View</span>
           </Link>
         </div>
 
