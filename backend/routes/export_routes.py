@@ -10,72 +10,7 @@ from fpdf import FPDF
 
 export_routes = Blueprint('export_routes', __name__)
 
-@export_routes.route('/api/export/xlsx')
-def export_xlsx():
-    try:
-        # Calculate totals for summary
-        total_income = db.session.query(func.sum(FarmRecord.amount)).filter(FarmRecord.category == 'Income').scalar() or 0
-        total_expense = db.session.query(func.sum(FarmRecord.amount)).filter(FarmRecord.category == 'Expense').scalar() or 0
-        net_profit = total_income - total_expense
-        
-        # Get category breakdown
-        expense_breakdown = db.session.query(
-            FarmRecord.expense_type, func.sum(FarmRecord.amount)
-        ).filter(
-            FarmRecord.category == 'Expense',
-            FarmRecord.expense_type != None
-        ).group_by(FarmRecord.expense_type).all()
-        
-        # All records
-        all_q = FarmRecord.query.order_by(FarmRecord.date.desc()).all()
-        all_records = [{
-            'Date': r.date.strftime('%Y-%m-%d') if r.date else '',
-            'Activity': r.activity_type,
-            'Category': r.category,
-            'Type': r.expense_type or '-',
-            'Amount (₹)': r.amount,
-            'Description': r.description or '-'
-        } for r in all_q]
 
-        # Weather logs
-        weather_q = WeatherLog.query.order_by(WeatherLog.date.desc()).all()
-        weather_records = [{
-            'Date': w.date.strftime('%Y-%m-%d') if w.date else '',
-            'Max Temp (°C)': w.max_temp or 0,
-            'Rainfall (mm)': w.rainfall or 0,
-            'Condition': w.description or '-'
-        } for w in weather_q]
-
-        # Create Excel in memory
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            # Summary Sheet
-            summary_df = pd.DataFrame({
-                'Metric': ['Total Income', 'Total Expenses', 'Net Profit'],
-                'Value': [f"₹{total_income:,.2f}", f"₹{total_expense:,.2f}", f"₹{net_profit:,.2f}"]
-            })
-            summary_df.to_excel(writer, sheet_name='Summary', index=False)
-            
-            # Category Breakdown
-            cat_df = pd.DataFrame([{'Category': item[0], 'Amount': item[1]} for item in expense_breakdown])
-            cat_df.to_excel(writer, sheet_name='Expense Breakdown', index=False)
-            
-            # Full Records
-            pd.DataFrame(all_records).to_excel(writer, sheet_name='Transactions', index=False)
-            
-            # Weather
-            pd.DataFrame(weather_records).to_excel(writer, sheet_name='Weather History', index=False)
-
-        output.seek(0)
-        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-        return send_file(
-            output,
-            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            as_attachment=True,
-            download_name=f'Farmate_Report_{timestamp}.xlsx'
-        )
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 class ProfessionalPDF(FPDF):
     def header(self):
