@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request
 from sqlalchemy import func
-from backend.models.models import FarmRecord, Reminder, WeatherLog
+from backend.models.models import FarmRecord, Reminder, WeatherLog, Note, Crop, Yield, DiseaseLog
 from backend.database import db
 import datetime
 
@@ -38,7 +38,6 @@ def admin_dashboard():
 
 @admin_routes.route('/api/admin/stats')
 def admin_stats_api():
-    from flask import request
     # Use -1 or 0 for unlimited, default to 10
     limit = request.args.get('limit', 10, type=int)
     
@@ -106,14 +105,20 @@ def admin_financial_data_api():
 
 @admin_routes.route('/api/admin/records', methods=['POST'])
 def add_record_api():
-    from flask import request
     data = request.json
     try:
+        # Handle multi-select expense types if provided as a list
+        expense_type_data = data.get('expense_type')
+        if isinstance(expense_type_data, list):
+            expense_type = ', '.join(expense_type_data)
+        else:
+            expense_type = expense_type_data
+
         new_record = FarmRecord(
             date=datetime.datetime.strptime(data['date'], '%Y-%m-%d').date() if data.get('date') else datetime.date.today(),
             activity_type=data.get('activity_type'),
             category=data.get('category'),
-            expense_type=data.get('expense_type'),
+            expense_type=expense_type,
             amount=float(data.get('amount', 0)),
             description=data.get('description')
         )
@@ -125,8 +130,6 @@ def add_record_api():
 
 @admin_routes.route('/api/admin/logs', methods=['GET', 'POST'])
 def manage_logs_api():
-    from flask import request
-    from backend.models.models import Note
     if request.method == 'POST':
         data = request.json
         try:
@@ -149,7 +152,6 @@ def manage_logs_api():
     } for n in notes])
 @admin_routes.route('/api/admin/crops', methods=['GET', 'POST'])
 def manage_crops_api():
-    from flask import request
     if request.method == 'POST':
         data = request.json
         try:
@@ -182,7 +184,6 @@ def manage_crops_api():
 
 @admin_routes.route('/api/admin/yields', methods=['GET', 'POST'])
 def manage_yields_api():
-    from flask import request
     if request.method == 'POST':
         data = request.json
         try:
@@ -213,7 +214,6 @@ def manage_yields_api():
 
 @admin_routes.route('/api/admin/disease_logs', methods=['GET', 'POST'])
 def manage_disease_logs_api():
-    from flask import request
     if request.method == 'POST':
         data = request.json
         try:
@@ -246,7 +246,6 @@ def manage_disease_logs_api():
 
 @admin_routes.route('/api/admin/reminders', methods=['GET', 'POST', 'PATCH'])
 def manage_reminders_api():
-    from flask import request
     if request.method == 'POST':
         data = request.json
         try:
@@ -284,7 +283,6 @@ def manage_reminders_api():
 
 @admin_routes.route('/api/admin/weather/history')
 def weather_history_api():
-    from flask import request
     days = request.args.get('days', 30, type=int)
     history = WeatherLog.query.order_by(WeatherLog.date.desc()).limit(days).all()
     

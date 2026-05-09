@@ -8,3 +8,9 @@ node_modules/
 dist/
 build/
 .DS_Store
+backups/
+exports/
+logs/
+scratch/
+error.txt
+temp/

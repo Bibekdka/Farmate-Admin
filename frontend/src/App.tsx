@@ -13,6 +13,8 @@ const Weather = lazy(() => import('./pages/Weather'))
 const Crops = lazy(() => import('./pages/Crops'))
 const Reminders = lazy(() => import('./pages/Reminders'))
 const DiseaseLog = lazy(() => import('./pages/DiseaseLog'))
+const Yields = lazy(() => import('./pages/Yields'))
+const PestLog = lazy(() => import('./pages/PestLog'))
 
 export default function App() {
   return (
@@ -61,6 +63,16 @@ export default function App() {
               <Route path="/diseases" element={
                 <ProtectedRoute>
                   <DiseaseLog />
+                </ProtectedRoute>
+              } />
+              <Route path="/yields" element={
+                <ProtectedRoute>
+                  <Yields />
+                </ProtectedRoute>
+              } />
+              <Route path="/pests" element={
+                <ProtectedRoute>
+                  <PestLog />
                 </ProtectedRoute>
               } />
             </Routes>

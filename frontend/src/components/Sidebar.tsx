@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, MessageSquare, CloudRain, Wallet, Notebook, LogOut, Sprout, Bell, ShieldAlert } from 'lucide-react'
+import { Home, MessageSquare, CloudRain, Wallet, Notebook, LogOut, Sprout, Bell, ShieldAlert, TrendingUp, Bug } from 'lucide-react'
 
 export default function Sidebar() {
   const location = useLocation()
@@ -12,8 +12,10 @@ export default function Sidebar() {
     { path: '/logs', icon: Notebook, label: 'Daily Blog' },
     { path: '/weather', icon: CloudRain, label: 'Weather' },
     { path: '/crops', icon: Sprout, label: 'Crops' },
+    { path: '/yields', icon: TrendingUp, label: 'Yields' },
     { path: '/reminders', icon: Bell, label: 'Tasks' },
     { path: '/diseases', icon: ShieldAlert, label: 'Health' },
+    { path: '/pests', icon: Bug, label: 'Pests' },
     { path: '/legacy-dashboard', icon: Home, label: 'Legacy View' },
   ]
 
