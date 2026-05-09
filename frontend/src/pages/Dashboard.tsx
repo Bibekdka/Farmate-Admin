@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
 import { API_URL } from '../config/api'
-import { Wallet, Notebook, CloudRain, MessageSquare, Activity } from 'lucide-react'
+import { Wallet, Notebook, CloudRain, MessageSquare, Activity, Home } from 'lucide-react'
 
 interface ActivityData {
   id: number
