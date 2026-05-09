@@ -39,6 +39,7 @@ def admin_dashboard():
 @admin_routes.route('/api/admin/stats')
 def admin_stats_api():
     from flask import request
+    # Use -1 or 0 for unlimited, default to 10
     limit = request.args.get('limit', 10, type=int)
     
     total_income = db.session.query(func.sum(FarmRecord.amount)).filter(FarmRecord.category == 'Income').scalar() or 0
@@ -46,15 +47,18 @@ def admin_stats_api():
     
     # Recent activities
     query = FarmRecord.query.order_by(FarmRecord.date.desc())
+    
     if limit > 0:
         recent = query.limit(limit).all()
     else:
         recent = query.all()
+
     activities = [{
         'id': r.id,
         'date': r.date.strftime('%Y-%m-%d') if r.date else '',
         'activity_type': r.activity_type,
         'category': r.category,
+        'expense_type': r.expense_type,
         'amount': r.amount,
         'description': r.description
     } for r in recent]

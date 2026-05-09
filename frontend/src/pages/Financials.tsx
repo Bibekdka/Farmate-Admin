@@ -33,7 +33,7 @@ export default function Financials() {
 
   const fetchRecords = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/admin/stats?limit=0`)
+      const res = await axios.get(`${API_URL}/api/admin/stats?limit=1000`)
       setRecords(res.data.activities)
     } catch (err) {
       console.error("Error fetching records:", err)
@@ -231,6 +231,24 @@ export default function Financials() {
                   <option value="All">All Types</option>
                   <option value="Income">Income Only</option>
                   <option value="Expense">Expense Only</option>
+                </select>
+                <ChevronDown size={14} className="text-gray-300 mr-2" />
+             </div>
+
+             <div className="flex items-center gap-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <Filter size={16} className="text-gray-400 ml-2" />
+                <select 
+                  value={filterCategory} 
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="bg-transparent border-none focus:ring-0 font-black text-[10px] uppercase tracking-widest text-gray-600 min-w-[120px]"
+                >
+                  <option value="All">All Categories</option>
+                  <option value="Labour">Labour</option>
+                  <option value="Medicine">Medicine</option>
+                  <option value="Seed">Seed</option>
+                  <option value="Fuel">Fuel</option>
+                  <option value="Fertilizer">Fertilizer</option>
+                  <option value="Misc">Misc</option>
                 </select>
                 <ChevronDown size={14} className="text-gray-300 mr-2" />
              </div>
