@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
 import { API_URL } from '../config/api'
-import { Wallet, Notebook, CloudRain, Activity, Home, Download, ShieldCheck, RefreshCw, BarChart3, ArrowUpRight, ArrowDownLeft } from 'lucide-react'
+import { Wallet, Notebook, CloudRain, Activity, Home, Download, ShieldCheck, RefreshCw, BarChart3, ArrowUpRight, ArrowDownLeft, TrendingUp, Bug } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface ActivityData {
@@ -122,7 +122,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <Link to="/financials" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
             <div className="p-3 bg-green-100 text-green-600 rounded-xl"><Wallet size={20} /></div>
             <span className="text-xs font-bold text-gray-600">Finance</span>
@@ -131,13 +131,17 @@ export default function Dashboard() {
             <div className="p-3 bg-blue-100 text-blue-600 rounded-xl"><Notebook size={20} /></div>
             <span className="text-xs font-bold text-gray-600">Daily Blog</span>
           </Link>
+          <Link to="/yields" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
+            <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl"><TrendingUp size={20} /></div>
+            <span className="text-xs font-bold text-gray-600">Yields</span>
+          </Link>
           <Link to="/weather" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
             <div className="p-3 bg-orange-100 text-orange-600 rounded-xl"><CloudRain size={20} /></div>
             <span className="text-xs font-bold text-gray-600">Weather</span>
           </Link>
-          <Link to="/legacy-dashboard" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Home size={20} /></div>
-            <span className="text-xs font-bold text-gray-600">Legacy View</span>
+          <Link to="/pests" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
+            <div className="p-3 bg-rose-100 text-rose-600 rounded-xl"><Bug size={20} /></div>
+            <span className="text-xs font-bold text-gray-600">Pests</span>
           </Link>
         </div>
 
