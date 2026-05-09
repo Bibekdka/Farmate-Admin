@@ -259,7 +259,32 @@ export default function Financials() {
                 </select>
                 <ChevronDown size={14} className="text-gray-300 mr-2" />
              </div>
-                    <div className="space-y-8">
+
+             <div className="flex items-center gap-2">
+                <a 
+                  href={`${API_URL}/api/export/xlsx`} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="p-3 bg-green-50 text-green-600 rounded-2xl border border-green-100 flex items-center gap-2 hover:bg-green-100 transition-all"
+                  title="Export to Excel"
+                >
+                  <FileText size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">Excel</span>
+                </a>
+                <a 
+                  href={`${API_URL}/api/export/pdf`} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="p-3 bg-red-50 text-red-500 rounded-2xl border border-red-100 flex items-center gap-2 hover:bg-red-100 transition-all"
+                  title="Export to PDF"
+                >
+                  <FileText size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-widest hidden lg:inline">PDF</span>
+                </a>
+             </div>
+          </div>
+
+          <div className="space-y-8">
             {loading ? (
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="h-32 bg-gray-100 rounded-3xl animate-pulse"></div>

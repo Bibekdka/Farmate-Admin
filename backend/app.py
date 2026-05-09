@@ -133,10 +133,12 @@ def create_app():
     from backend.routes.ai_routes import ai_routes
     from backend.routes.admin import admin_routes
     from backend.routes.legacy import legacy_routes
+    from backend.routes.export_routes import export_routes
 
     app.register_blueprint(ai_routes)
     app.register_blueprint(admin_routes)
     app.register_blueprint(legacy_routes)
+    app.register_blueprint(export_routes)
 
     # =========================
     # SERVE FRONTEND

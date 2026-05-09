@@ -281,3 +281,16 @@ def manage_reminders_api():
         'priority': r.priority,
         'completed': r.completed
     } for r in reminders])
+
+@admin_routes.route('/api/admin/weather/history')
+def weather_history_api():
+    from flask import request
+    days = request.args.get('days', 30, type=int)
+    history = WeatherLog.query.order_by(WeatherLog.date.desc()).limit(days).all()
+    
+    return jsonify([{
+        'date': w.date.strftime('%Y-%m-%d'),
+        'temp': w.max_temp,
+        'rainfall': w.rainfall,
+        'condition': w.description
+    } for w in history[::-1]]) # Return in chronological order

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
 import { API_URL } from '../config/api'
-import { Wallet, Notebook, CloudRain, MessageSquare, Activity, Home } from 'lucide-react'
+import { Wallet, Notebook, CloudRain, Activity, Home, Download, ShieldCheck, RefreshCw, BarChart3, ArrowUpRight, ArrowDownLeft } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface ActivityData {
   id: number
@@ -34,6 +35,9 @@ export default function Dashboard() {
   const [reminders, setReminders] = useState<Reminder[]>([])
   const [loading, setLoading] = useState(true)
 
+  const [weatherHistory, setWeatherHistory] = useState([])
+  const [backingUp, setBackingUp] = useState(false)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,6 +45,9 @@ export default function Dashboard() {
         setStats(res.data.stats)
         setActivities(res.data.activities)
         setReminders(res.data.reminders)
+        
+        const weatherRes = await axios.get(`${API_URL}/api/admin/weather/history?days=7`)
+        setWeatherHistory(weatherRes.data)
       } catch (err) {
         console.error("Error fetching stats:", err)
       } finally {
@@ -49,6 +56,18 @@ export default function Dashboard() {
     }
     fetchData()
   }, [])
+
+  const runBackup = async () => {
+    setBackingUp(true)
+    try {
+      const res = await axios.get(`${API_URL}/api/admin/backup`)
+      alert(res.data.message)
+    } catch (err) {
+      alert("Backup failed. Ensure the server is running locally.")
+    } finally {
+      setBackingUp(false)
+    }
+  }
 
   if (loading || !stats) {
     return <div className="p-10 text-center font-bold text-gray-400">Loading your farm data...</div>
@@ -161,8 +180,40 @@ export default function Dashboard() {
             </section>
           </div>
 
-          {/* Sidebar: Reminders */}
+          {/* Sidebar: Analytics & Safety */}
           <div className="space-y-6">
+            <section className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                   <BarChart3 size={20} className="text-orange-500" />
+                   Weather Trends
+                </h2>
+                <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">7 Days</span>
+              </div>
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={weatherHistory}>
+                    <defs>
+                      <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#f97316" stopOpacity={0.1}/>
+                        <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis 
+                      dataKey="date" 
+                      hide
+                    />
+                    <YAxis hide />
+                    <Tooltip 
+                      contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
+                    />
+                    <Area type="monotone" dataKey="temp" stroke="#f97316" fillOpacity={1} fill="url(#colorTemp)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="rainfall" stroke="#3b82f6" fill="#dbeafe" strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </section>
+
             <section className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <Activity size={20} className="text-orange-500" />
@@ -182,18 +233,27 @@ export default function Dashboard() {
               </div>
             </section>
 
-            <section className="bg-gradient-to-br from-green-600 to-green-800 p-8 rounded-3xl shadow-xl text-white relative overflow-hidden group">
+            <section className="bg-gray-900 p-8 rounded-3xl shadow-xl text-white relative overflow-hidden group">
                <div className="relative z-10">
-                 <h3 className="text-xl font-black mb-3 tracking-tight">Crop Manager</h3>
-                 <p className="text-green-100 text-sm font-medium mb-6 leading-relaxed opacity-90">Track your crop lifecycles and harvest estimations in one place.</p>
-                 <Link 
-                   to="/crops"
-                   className="inline-block bg-white text-green-700 px-8 py-3 rounded-2xl font-black text-sm hover:bg-green-50 transition-all shadow-lg active:scale-95"
+                 <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+                       <ShieldCheck size={24} />
+                    </div>
+                    <h2 className="text-xl font-bold tracking-tight">Safety Net</h2>
+                 </div>
+                 <p className="text-gray-400 text-xs font-bold leading-relaxed mb-6 opacity-80">
+                    Protect your farm data. Run an immediate local backup to your Desktop and OneDrive.
+                 </p>
+                 <button 
+                   onClick={runBackup}
+                   disabled={backingUp}
+                   className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-2xl ${backingUp ? 'bg-gray-800 text-gray-500' : 'bg-white text-gray-900 hover:bg-green-400 hover:text-white active:scale-95'}`}
                  >
-                   Manage Crops
-                 </Link>
+                   {backingUp ? <RefreshCw size={16} className="animate-spin" /> : <Download size={16} />}
+                   {backingUp ? 'Backing Up...' : 'Run Local Backup'}
+                 </button>
                </div>
-               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>
+               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-green-500/10 blur-3xl rounded-full group-hover:scale-150 transition-transform duration-700"></div>
             </section>
           </div>
         </div>
