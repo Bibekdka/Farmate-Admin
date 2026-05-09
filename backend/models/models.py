@@ -14,6 +14,7 @@ class FarmRecord(db.Model):
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500))
+    category = db.Column(db.String(50), default='General')
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
 class Crop(db.Model):

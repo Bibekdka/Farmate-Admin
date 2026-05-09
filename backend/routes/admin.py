@@ -119,7 +119,10 @@ def manage_logs_api():
     if request.method == 'POST':
         data = request.json
         try:
-            new_note = Note(content=data.get('content'))
+            new_note = Note(
+                content=data.get('content'),
+                category=data.get('category', 'General')
+            )
             db.session.add(new_note)
             db.session.commit()
             return jsonify({'status': 'success'}), 201
@@ -130,6 +133,7 @@ def manage_logs_api():
     return jsonify([{
         'id': n.id,
         'content': n.content,
+        'category': n.category,
         'date': n.created_at.strftime('%Y-%m-%d %H:%M')
     } for n in notes])
 @admin_routes.route('/api/admin/crops', methods=['GET', 'POST'])

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, MessageSquare, CloudRain, Wallet, Notebook, Sprout } from 'lucide-react'
+import { Home, CloudRain, Wallet, Notebook, Sprout } from 'lucide-react'
 
 export default function BottomNav() {
   const location = useLocation()
@@ -26,11 +26,11 @@ export default function BottomNav() {
         </Link>
 
         <Link 
-          to="/ai" 
+          to="/crops" 
           className="flex flex-col items-center justify-center w-full h-full -mt-8"
         >
-          <div className={`p-4 rounded-3xl shadow-xl transition-all duration-300 ${isActive('/ai') ? 'bg-green-600 text-white scale-110 shadow-green-200' : 'bg-green-500 text-white shadow-green-100'}`}>
-            <MessageSquare size={24} fill="currentColor" fillOpacity={0.2} />
+          <div className={`p-4 rounded-3xl shadow-xl transition-all duration-300 ${isActive('/crops') ? 'bg-green-600 text-white scale-110 shadow-green-200' : 'bg-green-500 text-white shadow-green-100'}`}>
+            <Sprout size={24} />
           </div>
         </Link>
 
@@ -43,11 +43,11 @@ export default function BottomNav() {
         </Link>
 
         <Link 
-          to="/crops" 
-          className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/crops') ? 'text-green-600' : 'text-gray-400'}`}
+          to="/weather" 
+          className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/weather') ? 'text-green-600' : 'text-gray-400'}`}
         >
-          <Sprout size={20} strokeWidth={isActive('/crops') ? 3 : 2} />
-          <span className="text-[10px] font-bold">Crops</span>
+          <CloudRain size={20} strokeWidth={isActive('/weather') ? 3 : 2} />
+          <span className="text-[10px] font-bold">Weather</span>
         </Link>
       </div>
     </div>

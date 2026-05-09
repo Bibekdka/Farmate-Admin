@@ -4,6 +4,9 @@ import sys
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_talisman import Talisman
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -22,6 +25,17 @@ def create_app():
     app = Flask(__name__, 
                 template_folder='../templates',
                 static_folder='../static')
+
+    # Security Headers
+    Talisman(app, content_security_policy=None) # CSP handled by Netlify/Frontend mostly
+
+    # Rate Limiting
+    limiter = Limiter(
+        key_func=get_remote_address,
+        app=app,
+        default_limits=["200 per day", "50 per hour"],
+        storage_uri="memory://"
+    )
 
     # =========================
     # REQUIRED ENV VARIABLES
@@ -76,10 +90,10 @@ def create_app():
         app,
         resources={
             r"/api/*": {
-                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app"]
+                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app", "https://farmate-admin.netlify.app"]
             },
             r"/admin/*": {
-                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app"]
+                "origins": [FRONTEND_URL, "https://radiant-kleicha-d978e8.netlify.app", "https://farmate-admin.netlify.app"]
             }
         },
         supports_credentials=True

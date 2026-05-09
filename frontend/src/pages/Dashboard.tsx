@@ -116,9 +116,9 @@ export default function Dashboard() {
             <div className="p-3 bg-orange-100 text-orange-600 rounded-xl"><CloudRain size={20} /></div>
             <span className="text-xs font-bold text-gray-600">Weather</span>
           </Link>
-          <Link to="/ai" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
-            <div className="p-3 bg-purple-100 text-purple-600 rounded-xl"><MessageSquare size={20} /></div>
-            <span className="text-xs font-bold text-gray-600">Farm AI</span>
+          <Link to="/crops" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center gap-2 hover:bg-green-50 transition-colors">
+            <div className="p-3 bg-green-100 text-green-600 rounded-xl"><Activity size={20} /></div>
+            <span className="text-xs font-bold text-gray-600">Crops</span>
           </Link>
         </div>
 
@@ -128,7 +128,7 @@ export default function Dashboard() {
             <section className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-50 flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Recent Activities</h2>
-                <button className="text-sm text-green-600 font-bold hover:underline">View All</button>
+                <Link to="/financials" className="text-sm text-green-600 font-bold hover:underline">View All</Link>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -184,13 +184,13 @@ export default function Dashboard() {
 
             <section className="bg-gradient-to-br from-green-600 to-green-800 p-8 rounded-3xl shadow-xl text-white relative overflow-hidden group">
                <div className="relative z-10">
-                 <h3 className="text-xl font-black mb-3 tracking-tight">Farm AI Helper</h3>
-                 <p className="text-green-100 text-sm font-medium mb-6 leading-relaxed opacity-90">Get instant advice on pest control, crop yields, and financial planning.</p>
+                 <h3 className="text-xl font-black mb-3 tracking-tight">Crop Manager</h3>
+                 <p className="text-green-100 text-sm font-medium mb-6 leading-relaxed opacity-90">Track your crop lifecycles and harvest estimations in one place.</p>
                  <Link 
-                   to="/ai"
+                   to="/crops"
                    className="inline-block bg-white text-green-700 px-8 py-3 rounded-2xl font-black text-sm hover:bg-green-50 transition-all shadow-lg active:scale-95"
                  >
-                   Chat with AI
+                   Manage Crops
                  </Link>
                </div>
                <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>

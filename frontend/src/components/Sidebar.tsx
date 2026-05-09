@@ -14,7 +14,6 @@ export default function Sidebar() {
     { path: '/crops', icon: Sprout, label: 'Crops' },
     { path: '/reminders', icon: Bell, label: 'Tasks' },
     { path: '/diseases', icon: ShieldAlert, label: 'Health' },
-    { path: '/ai', icon: MessageSquare, label: 'Farm AI' },
   ]
 
   return (

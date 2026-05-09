@@ -1,16 +1,18 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import AIChat from './pages/AIChat'
-import Login from './pages/Login'
-import Financials from './pages/Financials'
-import DailyLog from './pages/DailyLog'
-import Weather from './pages/Weather'
-import Crops from './pages/Crops'
-import Reminders from './pages/Reminders'
-import DiseaseLog from './pages/DiseaseLog'
 import ProtectedRoute from './components/ProtectedRoute'
 import BottomNav from './components/BottomNav'
 import Sidebar from './components/Sidebar'
+
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const AIChat = lazy(() => import('./pages/AIChat'))
+const Login = lazy(() => import('./pages/Login'))
+const Financials = lazy(() => import('./pages/Financials'))
+const DailyLog = lazy(() => import('./pages/DailyLog'))
+const Weather = lazy(() => import('./pages/Weather'))
+const Crops = lazy(() => import('./pages/Crops'))
+const Reminders = lazy(() => import('./pages/Reminders'))
+const DiseaseLog = lazy(() => import('./pages/DiseaseLog'))
 
 export default function App() {
   return (
@@ -18,49 +20,51 @@ export default function App() {
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <main className="flex-1 pb-20 md:pb-0">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/ai" element={
-              <ProtectedRoute>
-                <AIChat />
-              </ProtectedRoute>
-            } />
-            <Route path="/financials" element={
-              <ProtectedRoute>
-                <Financials />
-              </ProtectedRoute>
-            } />
-            <Route path="/logs" element={
-              <ProtectedRoute>
-                <DailyLog />
-              </ProtectedRoute>
-            } />
-            <Route path="/weather" element={
-              <ProtectedRoute>
-                <Weather />
-              </ProtectedRoute>
-            } />
-            <Route path="/crops" element={
-              <ProtectedRoute>
-                <Crops />
-              </ProtectedRoute>
-            } />
-            <Route path="/reminders" element={
-              <ProtectedRoute>
-                <Reminders />
-              </ProtectedRoute>
-            } />
-            <Route path="/diseases" element={
-              <ProtectedRoute>
-                <DiseaseLog />
-              </ProtectedRoute>
-            } />
-          </Routes>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-bold text-gray-300 animate-pulse">Loading Farmate...</div>}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/ai" element={
+                <ProtectedRoute>
+                  <AIChat />
+                </ProtectedRoute>
+              } />
+              <Route path="/financials" element={
+                <ProtectedRoute>
+                  <Financials />
+                </ProtectedRoute>
+              } />
+              <Route path="/logs" element={
+                <ProtectedRoute>
+                  <DailyLog />
+                </ProtectedRoute>
+              } />
+              <Route path="/weather" element={
+                <ProtectedRoute>
+                  <Weather />
+                </ProtectedRoute>
+              } />
+              <Route path="/crops" element={
+                <ProtectedRoute>
+                  <Crops />
+                </ProtectedRoute>
+              } />
+              <Route path="/reminders" element={
+                <ProtectedRoute>
+                  <Reminders />
+                </ProtectedRoute>
+              } />
+              <Route path="/diseases" element={
+                <ProtectedRoute>
+                  <DiseaseLog />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </Suspense>
         </main>
         <BottomNav />
       </div>
